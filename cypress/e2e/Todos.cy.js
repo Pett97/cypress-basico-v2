@@ -15,11 +15,11 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     it("Digitando em campos e clicando em elementos", () => {
       cy.get("#firstName")
         .should("be.visible")
-        .type("Pett")
+        .type("Pett",{ delay: 0 })
         .should("have.value", "Pett");
-      cy.get("#lastName").type("Padua");
-      cy.get("#email").type("teste@gmail.com");
-      cy.get("#open-text-area").type("testes");
+      cy.get("#lastName").type("Padua", { delay: 0 });
+      cy.get("#email").type("teste@gmail.com", { delay: 0 });
+      cy.get("#open-text-area").type("testes", { delay: 0 });
       cy.get(".button").click();
       cy.get(".success").should("exist");
     });
@@ -27,11 +27,11 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     it("teste validacao campos obrigatorios", () => {
       cy.get("#firstName")
         .should("be.visible")
-        .type("Pett")
+        .type("Pett", { delay: 0 })
         .should("have.value", "Pett");
       cy.get("#lastName").should("be.visible");
-      cy.get("#email").type("teste@gmail.com");
-      cy.get("#open-text-area").type("testes");
+      cy.get("#email").type("teste@gmail.com", { delay: 0 });
+      cy.get("#open-text-area").type("testes",{ delay: 0 });
       cy.get(".button").click();
       cy.get(".error").should("contain", "Valide os campos obrigatórios!");
     });
@@ -41,20 +41,20 @@ describe("Central de Atendimento ao Cliente TAT", () => {
         .should("be.visible")
         .type("Pett")
         .should("have.value", "Pett");
-      cy.get("#lastName").type("Padua");
-      cy.get("#email").type("teste@gmail.com");
-      cy.get("#phone").type("teste").should("have.value", "");
-      cy.get("#open-text-area").type("testes");
+      cy.get("#lastName").type("Padua", { delay: 0 });
+      cy.get("#email").type("teste@gmail.com", { delay: 0 });
+      cy.get("#phone").type("teste", { delay: 0 }).should("have.value", "");
+      cy.get("#open-text-area").type("testes", { delay: 0 });
       cy.get(".button").click();
     });
 
     it("exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
       cy.get("#firstName")
         .should("be.visible")
-        .type("Pett")
+        .type("Pett", { delay: 0 })
         .should("have.value", "Pett");
-      cy.get("#lastName").type("Padua");
-      cy.get("#email").type("teste@gmail.com");
+      cy.get("#lastName").type("Padua", { delay: 0 });
+      cy.get("#email").type("teste@gmail.com", { delay: 0 });
       cy.get("#phone-checkbox").click();
       cy.get(".error").should("contain", "Valide os campos obrigatórios!");
       cy.get(".button").click();
@@ -63,11 +63,11 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     it("exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
       cy.get("#firstName")
         .should("be.visible")
-        .type("Pett")
+        .type("Pett", { delay: 0 })
         .should("have.value", "Pett")
         .clear();
       cy.get("#lastName").type("Padua");
-      cy.get("#email").type("teste@gmail.com");
+      cy.get("#email").type("teste@gmail.com", { delay: 0 });
       cy.get(".button").click();
       cy.get(".error").should("contain", "Valide os campos obrigatórios!");
       cy.get(".button").click();
@@ -81,11 +81,11 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     //util para buscar elementos em lista dinamicas
     it("Com CONTAINS", () => {
       cy.contains("button", "Enviar");
-      cy.contains("label", "Nome").type("Pett C");
-      cy.contains("label", "Sobrenome").type("Henrique");
-      cy.contains("label", "E-mail").type("henrique@gmail.com");
-      cy.contains("label", "Telefone").type("91241506");
-      cy.get("#open-text-area").type("testes");
+      cy.contains("label", "Nome").type("Pett C", { delay: 0 });
+      cy.contains("label", "Sobrenome").type("Henrique"),{ delay: 0 };
+      cy.contains("label", "E-mail").type("henrique@gmail.com", { delay: 0 });
+      cy.contains("label", "Telefone").type("91241506", { delay: 0 });
+      cy.get("#open-text-area").type("testes", { delay: 0 });
       cy.contains("button", "Enviar").click();
       cy.get(".success").should("contain", "Mensagem enviada com sucesso");
     });
@@ -134,14 +134,29 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     it("exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
       cy.get("#firstName")
         .should("be.visible")
-        .type("Pett")
+        .type("Pett", { delay: 0 })
         .should("have.value", "Pett");
-      cy.get("#lastName").type("Padua");
-      cy.get("#email").type("teste@gmail.com");
+      cy.get("#lastName").type("Padua", { delay: 0 });
+      cy.get("#email").type("teste@gmail.com", { delay: 0 });
       cy.get("#phone-checkbox").check();
 
       cy.get(".button").click();
       cy.get(".error").should("contain", "Valide os campos obrigatórios!");
     });
+  });
+
+  describe("Exercicio 6 e extras Fazendo upload de arquivos com Cypress", () => {
+    it("seleciona um arquivo da pasta fixtures", () => {
+      cy.fixture("example.json").as("testeJson");
+      cy.get('input[type="file"]#file-upload')
+        .should("not.have.value")
+        .selectFile("@testeJson")
+        .should(function ($input) {
+          //console.log($input)
+
+          expect($input[0].files[0].name).to.be.equal("example.json");
+        });
+    });
+
   });
 });
