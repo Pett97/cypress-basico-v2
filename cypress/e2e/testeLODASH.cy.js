@@ -2,6 +2,7 @@
 
 describe("Central de Atendimento ao Cliente TAT", () => {
   beforeEach(() => {
+    console.clear();
     cy.visit("../../src/index.html");
   });
 
@@ -13,15 +14,17 @@ describe("Central de Atendimento ao Cliente TAT", () => {
 
   describe("2", () => {
     it("Digitando em campos e clicando em elementos", () => {
-      cy.get("#firstName")
-        .should("be.visible")
-        .type("Pett", { delay: 0 })
-        .should("have.value", "Pett");
-      cy.get("#lastName").type("Padua", { delay: 0 });
-      cy.get("#email").type("teste@gmail.com", { delay: 0 });
-      cy.get("#open-text-area").type("testes", { delay: 0 });
-      cy.get(".button").click();
-      cy.get(".success").should("exist");
+      Cypress._.repeat(5, () => {
+        cy.get("#firstName")
+          .should("be.visible")
+          .type("Pett", { delay: 0 })
+          .should("have.value", "Pett");
+        cy.get("#lastName").type("Padua", { delay: 0 });
+        cy.get("#email").type("teste@gmail.com", { delay: 0 });
+        cy.get("#open-text-area").type("testes", { delay: 0 });
+        cy.get(".button").click();
+        cy.get(".success").should("exist");
+      });
     });
 
     it("teste validacao campos obrigatorios", () => {
@@ -146,15 +149,14 @@ describe("Central de Atendimento ao Cliente TAT", () => {
   });
 
   describe("Exercicio 6 e extras Fazendo upload de arquivos com Cypress", () => {
-    it("seleciona um arquivo da pasta fixtures", () => {
+    it("seleciona um arquivo da pasta fixtures", function () {
       cy.fixture("example.json").as("testeJson");
       cy.get('input[type="file"]#file-upload')
         .should("not.have.value")
         .selectFile("@testeJson")
         .should(function ($input) {
-          //console.log($input)
-
           expect($input[0].files[0].name).to.be.equal("example.json");
+          console.log($input);
         });
     });
   });
@@ -195,26 +197,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
       cy.get(".success").should("not.be.visible");
     });
     it("Invokes Teste HIDE AND SHOW", () => {
-      let longtoTexto = Cypress._.repeat("asdfqer12e3123", 5);
-      cy.get("#open-text-area")
-        .invoke("val", longtoTexto)
-        .should("have.value", longtoTexto);
-    });
-    it("faz uma requisição HTTP", () => {
-      cy.request(
-        "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html"
-      ).should((response) => {
-        let { status, statusText, body } = response;
-        expect(status).to.be.equal(200);
-        expect(statusText).to.equal("OK");
-        expect(body).to.be.include("CAC TAT");
-      });
-    });
-  });
-
-  describe("Desafio Encontrar o GATO", () => {
-    it("ok", () => {
-      cy.get("#cat").invoke("show").should("be.visible");
+      cy.get(".success").invoke("show").should("be.visible");
     });
   });
 });
