@@ -15,7 +15,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     it("Digitando em campos e clicando em elementos", () => {
       cy.get("#firstName")
         .should("be.visible")
-        .type("Pett",{ delay: 0 })
+        .type("Pett", { delay: 0 })
         .should("have.value", "Pett");
       cy.get("#lastName").type("Padua", { delay: 0 });
       cy.get("#email").type("teste@gmail.com", { delay: 0 });
@@ -31,7 +31,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
         .should("have.value", "Pett");
       cy.get("#lastName").should("be.visible");
       cy.get("#email").type("teste@gmail.com", { delay: 0 });
-      cy.get("#open-text-area").type("testes",{ delay: 0 });
+      cy.get("#open-text-area").type("testes", { delay: 0 });
       cy.get(".button").click();
       cy.get(".error").should("contain", "Valide os campos obrigatórios!");
     });
@@ -82,7 +82,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     it("Com CONTAINS", () => {
       cy.contains("button", "Enviar");
       cy.contains("label", "Nome").type("Pett C", { delay: 0 });
-      cy.contains("label", "Sobrenome").type("Henrique"),{ delay: 0 };
+      cy.contains("label", "Sobrenome").type("Henrique"), { delay: 0 };
       cy.contains("label", "E-mail").type("henrique@gmail.com", { delay: 0 });
       cy.contains("label", "Telefone").type("91241506", { delay: 0 });
       cy.get("#open-text-area").type("testes", { delay: 0 });
@@ -157,6 +157,21 @@ describe("Central de Atendimento ao Cliente TAT", () => {
           expect($input[0].files[0].name).to.be.equal("example.json");
         });
     });
+  });
 
+  describe("Exercicio 7 e extras Lidando com links que abrem em outra aba", () => {
+    it("verifica que a política de privacidade abre em outra aba sem a necessidade de um clique", () => {
+      cy.get('a[href="privacy.html"]').should("have.attr", "target", "_blank");
+      cy.get('a[href="privacy.html"]').invoke("removeAttr", "target").click();
+    });
+
+    it.only("esta a página da política de privacidade de forma independente", () => {
+      cy.get("#privacy a").invoke("removeAttr", "target").click();
+      cy.title().should(
+        "have.contain",
+        "Central de Atendimento ao Cliente TAT - Política de privacidade"
+      );
+      cy.get("#title").should("have.text", "CAC TAT - Política de privacidade");
+    });
   });
 });
