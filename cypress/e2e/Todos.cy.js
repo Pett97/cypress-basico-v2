@@ -79,7 +79,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     });
 
     //util para buscar elementos em lista dinamicas
-    it.only("Com CONTAINS", () => {
+    it("Com CONTAINS", () => {
       cy.contains("button", "Enviar");
       cy.contains("label", "Nome").type("Pett C");
       cy.contains("label", "Sobrenome").type("Henrique");
@@ -113,9 +113,35 @@ describe("Central de Atendimento ao Cliente TAT", () => {
         .and("have.value", "feedback");
     });
     it("marca cada tipo de atendimento", () => {
+      cy.get('input[type="radio"').should("have.length", 3);
       cy.get('input[type="radio"').each(($el) => {
         cy.wrap($el).check().should("be.checked");
       });
+    });
+  });
+
+  describe("Exercicio 5 Marcando (e desmarcando) inputs do tipo checkbox e extras", () => {
+    it("marca ambos checkboxes, depois desmarca o último", () => {
+      cy.get('#check input[type="checkbox"]')
+        .as("checkboxes")
+        .check()
+        .should("be.checked")
+        .last()
+        .uncheck()
+        .should("not.be.checked");
+    });
+
+    it("exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
+      cy.get("#firstName")
+        .should("be.visible")
+        .type("Pett")
+        .should("have.value", "Pett");
+      cy.get("#lastName").type("Padua");
+      cy.get("#email").type("teste@gmail.com");
+      cy.get("#phone-checkbox").check();
+
+      cy.get(".button").click();
+      cy.get(".error").should("contain", "Valide os campos obrigatórios!");
     });
   });
 });
