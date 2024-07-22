@@ -78,26 +78,29 @@ describe("Central de Atendimento ao Cliente TAT", () => {
       cy.get(".error").should("contain", "Valide os campos obrigatórios!");
     });
 
-    it("Com CONTAINS", () => {
+    //util para buscar elementos em lista dinamicas
+    it.only("Com CONTAINS", () => {
       cy.contains("button", "Enviar");
       cy.contains("label", "Nome").type("Pett C");
       cy.contains("label", "Sobrenome").type("Henrique");
       cy.contains("label", "E-mail").type("henrique@gmail.com");
       cy.contains("label", "Telefone").type("91241506");
       cy.get("#open-text-area").type("testes");
-      cy.get(".button").click();
+      cy.contains("button", "Enviar").click();
       cy.get(".success").should("contain", "Mensagem enviada com sucesso");
     });
 
-    it("Com Comando Customizado",()=>{
+    it("Com Comando Customizado", () => {
       cy.enviarFormularioComSucesso();
-    })
+    });
   });
 
   describe("Exercicio 3 e extras", () => {
+    //seleciona pelo texto da selação
     it("seleciona um produto (Blog) por seu texto", () => {
       cy.get("#product").select("Blog").and("have.value", "blog");
     });
+    //é mais acertivo porém teria que conhecer a utilidade do valor informado
     it("seleciona um produto (Mentoria) por seu valor (value)", () => {
       cy.get("#product").select("mentoria").and("have.value", "mentoria");
     });
